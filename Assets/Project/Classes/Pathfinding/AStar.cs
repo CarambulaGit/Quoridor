@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Project.Classes.Field;
 using Project.Interfaces;
 
-namespace Project.Classes {
+namespace Project.Classes.Pathfinding {
     public static class AStar<T> where T : ICanBeCrossed {
         public class Node {
             public Node Parent { get; set; }

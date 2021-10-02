@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Project.Classes.Field;
 
-namespace Project.Classes {
+namespace Project.Classes.Player {
     public abstract class Player {
         public bool myTurn;
         private bool _moveDone;

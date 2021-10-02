@@ -1,4 +1,4 @@
-﻿namespace Project.Classes {
+﻿namespace Project.Classes.Field {
     public class Wall {
         // Wall takes 3 FieldSpaces
         // X and Y coordinates of central FieldSpace

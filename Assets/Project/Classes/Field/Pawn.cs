@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlockType = Project.Classes.FieldSpace.BlockType;
+using BlockType = Project.Classes.Field.FieldSpace.BlockType;
 
-namespace Project.Classes {
+namespace Project.Classes.Field {
     public class Pawn {
         public static int NumOfCreatedPawns; // todo nullify when restart
 
@@ -26,8 +26,8 @@ namespace Project.Classes {
             }
         }
 
-        public Player Owner { get; }
-        public Field Field { get; }
+        public Player.Player Owner { get; }
+        public Classes.Field.Field Field { get; }
 
         public Priority PawnPriority { get; }
 
@@ -41,7 +41,7 @@ namespace Project.Classes {
         private Point _pos;
         public event Action PosChanged;
         
-        public Pawn(Point pos, Player owner, Field field, Predicate<Point> winCondition) {
+        public Pawn(Point pos, Player.Player owner, Classes.Field.Field field, Predicate<Point> winCondition) {
             Pos = pos;
             Owner = owner;
             Field = field;

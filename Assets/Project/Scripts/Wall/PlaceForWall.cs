@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Project.Scripts {
+namespace Project.Scripts.Wall {
     public class PlaceForWall : MonoBehaviour {
         [Range(0, 1f)][SerializeField] private float radius = 0.01f;
         [SerializeField] private int y;

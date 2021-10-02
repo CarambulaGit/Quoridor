@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Project.Classes.Pathfinding;
 using UnityEngine;
-using BlockType = Project.Classes.FieldSpace.BlockType;
+using BlockType = Project.Classes.Field.FieldSpace.BlockType;
 
-namespace Project.Classes {
+namespace Project.Classes.Field {
     public struct Point {
         public int Y { get; }
         public int X { get; }

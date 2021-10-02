@@ -1,7 +1,7 @@
 ﻿using System;
 using Project.Interfaces;
 
-namespace Project.Classes {
+namespace Project.Classes.Field {
     public class FieldSpace : ICloneable, ICanBeCrossed {
         public enum BlockType {
             Empty,

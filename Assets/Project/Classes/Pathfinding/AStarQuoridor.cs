@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Project.Classes.Field;
 
-namespace Project.Classes {
+namespace Project.Classes.Pathfinding {
     public static class AStarQuoridor {
         private static List<Point> _path = new List<Point>();
         private static List<Point> _finishes = new List<Point>();
