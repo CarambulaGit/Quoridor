@@ -15,9 +15,9 @@ namespace Project.Scripts {
         public int GetY => y;
         public int GetX => x;
 
-        private void Start() {
+        private void Awake() {
             CheckInitialization();
-            controller.OnClick += TryMove;
+            Subscribe();
         }
 
         private void CheckInitialization() {
@@ -25,6 +25,15 @@ namespace Project.Scripts {
             gameManager ??= GameObject.FindGameObjectWithTag(Consts.GAME_MANAGER_TAG).GetComponent<GameManager>();
             wallPlacer ??= FindObjectOfType<WallPlacer>();
             meshRenderer ??= GetComponent<MeshRenderer>();
+        }
+
+        private void Subscribe() {
+            controller.OnClick += TryMove;
+        }
+
+        private void Unsubscribe() {
+            controller.OnClick -= TryMove;
+
         }
 
         private void OnDrawGizmos() {

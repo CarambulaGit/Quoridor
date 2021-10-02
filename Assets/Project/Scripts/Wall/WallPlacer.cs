@@ -22,9 +22,8 @@ namespace Project.Scripts {
 
         private void Awake() {
             CheckInitialization();
-            SubscribeToControllerEvents();
-            _boardPlane = new Plane(Vector3.up,
-                places.Length > 0 ? places[0].transform.position : transform.position);
+            Subscribe();
+            InitBoardPlane();
         }
 
         private void CheckInitialization() {
@@ -33,15 +32,42 @@ namespace Project.Scripts {
             controller ??= FindObjectOfType<WallPlacerController>();
             places ??= FindObjectsOfType<PlaceForWall>();
         }
-        
+
+        private void Subscribe() {
+            SubscribeToControllerEvents();
+        }
+
+        private void Unsubscribe() {
+            UnsubscribeFromControllerEvents();
+        }
+
+        private void InitBoardPlane() {
+            _boardPlane = new Plane(Vector3.up,
+                places.Length > 0 ? places[0].transform.position : transform.position);
+        }
+
         private void SubscribeToControllerEvents() {
-            controller.OnVerticalWallKeyDown += () => SelectWall(Wall.Type.Vertical);
-            controller.OnHorizontalWallKeyDown += () => SelectWall(Wall.Type.Horizontal);
+            controller.OnVerticalWallKeyDown += SelectVerticalWall;
+            controller.OnHorizontalWallKeyDown += SelectHorizontalWall;
             controller.OnTrySetWallKeyDown += TrySetWall;
         }
 
+        private void UnsubscribeFromControllerEvents() {
+            controller.OnVerticalWallKeyDown -= SelectVerticalWall;
+            controller.OnHorizontalWallKeyDown -= SelectHorizontalWall;
+            controller.OnTrySetWallKeyDown -= TrySetWall;
+        }
+
+        private void SelectVerticalWall() {
+            SelectWall(Wall.Type.Vertical);
+        }
+
+        private void SelectHorizontalWall() {
+            SelectWall(Wall.Type.Horizontal);
+        }
+
         private void Update() {
-            if (!gameManager.Game.GameRunning) {
+            if (!gameManager.Initialized) {
                 return;
             }
 
