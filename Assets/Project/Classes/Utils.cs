@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,6 +27,39 @@ namespace Project.Classes {
             for (var i = 0; i < n; i++) {
                 for (var j = 0; j < m; j++) {
                     result[i, j] = (T) obj[i, j].Clone();
+                }
+            }
+
+            return result;
+        }
+
+        public static T GetNextCycled<T>(this IEnumerator<T> enumerator) {
+            if (enumerator.MoveNext()) {
+                return enumerator.Current;
+            }
+
+            enumerator.Reset();
+            enumerator.MoveNext();
+            return enumerator.Current;
+        }
+
+        public static Action
+            AddHandlerOnIndex(this Action eventHandler, int index, Action newHandler) {
+            Action result = null;
+            var handlers = eventHandler?.GetInvocationList()
+                .OfType<Action>()
+                .ToList();
+            var handlersLen = handlers?.Count ?? 0;
+            if (index >= handlersLen) {
+                result = eventHandler;
+                result += newHandler;
+            }
+            else {
+                for (var i = 0; i < handlersLen; i++) {
+                    if (i == index) {
+                        result += newHandler;
+                    }
+                    result += handlers[i];
                 }
             }
 
