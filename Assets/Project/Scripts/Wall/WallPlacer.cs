@@ -75,10 +75,18 @@ namespace Project.Scripts.Wall {
         }
 
         private void SelectVerticalWall() {
+            if (!gameManager.Game.GameRunning) {
+                return;
+            }
+            
             SelectWall(Classes.Field.Wall.Type.Vertical);
         }
 
         private void SelectHorizontalWall() {
+            if (!gameManager.Game.GameRunning) {
+                return;
+            }
+            
             SelectWall(Classes.Field.Wall.Type.Horizontal);
         }
 
@@ -95,7 +103,11 @@ namespace Project.Scripts.Wall {
         }
 
         private void TrySetWall() {
-            if (_selectedWall == null) return;
+            if (!gameManager.Game.GameRunning) {
+                return;
+            }
+            
+            if (_selectedWall == null || _selectedWallGO == null) return;
             if (gameManager.CurrentPlayer.TrySetWall(new Classes.Field.Wall(_closestPlace.GetY, _closestPlace.GetX,
                 _type))) {
                 // if (_selectedWall != null && gameManager.Field.TrySetWall(_selectedWall)) {

@@ -37,8 +37,8 @@ namespace Project.Scripts {
         public void CreatePlayerVsPlayer() {
             var players = new List<Player> {new LocalPlayer(), new LocalPlayer()};
             Game = new Game(Consts.DEFAULT_FIELD_SIZE_Y, Consts.DEFAULT_FIELD_SIZE_X, players);
-            Game.StartGame();
             Initialized = true;
+            Game.StartGame();
         }
 
         public void CreatePlayerVsBot(bool playerMoveFirst = true) {

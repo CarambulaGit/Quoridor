@@ -8,6 +8,7 @@ namespace Project.Scripts.UI {
         [SerializeField] private GameManager gameManager;
         [SerializeField] private TextMeshProUGUI numOfWallsP1;
         [SerializeField] private TextMeshProUGUI numOfWallsP2;
+        [SerializeField] private GameObject tutorial;
         private Player _p1;
         private Player _p2;
         private bool _firstMatch = true;
@@ -72,10 +73,12 @@ namespace Project.Scripts.UI {
 
         private void Activate() {
             ActivateNumOfWallsGOs();
+            ActivateTutorial();
         }
 
         private void Deactivate() {
             DeactivateNumOfWallsGOs();
+            DeactivateTutorial();
         }
 
         private void ActivateNumOfWallsGOs() {
@@ -86,6 +89,14 @@ namespace Project.Scripts.UI {
         private void DeactivateNumOfWallsGOs() {
             DeactivateGameObject(numOfWallsP1.gameObject);
             DeactivateGameObject(numOfWallsP2.gameObject);
+        }
+
+        private void ActivateTutorial() {
+            ActivateGameObject(tutorial);
+        }
+
+        private void DeactivateTutorial() {
+            DeactivateGameObject(tutorial);
         }
     }
 }
