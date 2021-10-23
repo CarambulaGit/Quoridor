@@ -5,15 +5,6 @@ using BlockType = Project.Classes.Field.FieldSpace.BlockType;
 
 namespace Project.Classes.Field {
     public class Pawn {
-        public static int NumOfCreatedPawns; // todo nullify when restart
-
-        public enum Priority {
-            First = 0,
-            Second = 1,
-            Third = 2,
-            Fourth = 3
-        }
-
         public Point Pos {
             get => _pos;
             private set {
@@ -28,9 +19,7 @@ namespace Project.Classes.Field {
 
         public Player.Player Owner { get; }
         public Classes.Field.Field Field { get; }
-
-        public Priority PawnPriority { get; }
-
+        
         public Predicate<Point> WinnerCondition { get; private set; }
         public int Y => Pos.Y;
         public int X => Pos.X;
@@ -45,13 +34,7 @@ namespace Project.Classes.Field {
             Pos = pos;
             Owner = owner;
             Field = field;
-            PawnPriority = (Priority) NumOfCreatedPawns;
             WinnerCondition = winCondition;
-            NumOfCreatedPawns += 1;
-        }
-
-        ~Pawn() {
-            NumOfCreatedPawns -= 1; // todo test is it works
         }
 
         public bool TryMove(Point newPos) {
