@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Project.Classes.Field;
+using Project.Classes.Player;
 using UnityEngine;
 
 namespace Project.Classes {
@@ -9,6 +12,7 @@ namespace Project.Classes {
         private bool _gameRunning;
         private Task _waitTask;
         private IEnumerator<Player.Player> _playersEnumerator;
+        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
         public Field.Field Field { get; private set; }
         public List<Player.Player> Players { get; private set; }
         public Player.Player CurrentPlayer { get; private set; }
@@ -35,11 +39,7 @@ namespace Project.Classes {
         public event Action<Player.Player> GameFinishedWithWinner;
         public event Action OnNextTurn;
 
-        public void AddHandlerForOnNextTurn(int index, Action newHandler) {
-            OnNextTurn = OnNextTurn.AddHandlerOnIndex(index, newHandler);
-        }
-
-        public Game(int ySize, int xSize, List<Player.Player> players) {
+        private Game(int ySize, int xSize, List<Player.Player> players) {
             if (players.Count < 2) {
                 throw new ArgumentException("There are must be at least 2 players");
             }
@@ -82,13 +82,25 @@ namespace Project.Classes {
             }
         }
 
+        public static Game CreatePlayerVsPlayer() {
+            var players = new List<Player.Player> {new LocalPlayer(), new LocalPlayer()};
+            return new Game(Consts.DEFAULT_FIELD_SIZE_Y, Consts.DEFAULT_FIELD_SIZE_X, players);
+        }
+
+        public static Game CreatePlayerVsBot(bool playerMoveFirst = true) {
+            var players = playerMoveFirst
+                ? new List<Player.Player> {new LocalPlayer(), new RandomBot()}
+                : new List<Player.Player> {new RandomBot(), new LocalPlayer()};
+            return new Game(Consts.DEFAULT_FIELD_SIZE_Y, Consts.DEFAULT_FIELD_SIZE_X, players);
+        }
+
 
         public void Tick() {
             if (!GameRunning) return;
 
             if (_waitTask.IsCompleted && !IsThereWinner(out var winner)) {
                 OnNextTurn?.Invoke();
-                _waitTask = WaitForMove();
+                _waitTask = WaitForMove(_tokenSource.Token);
             }
         }
 
@@ -105,9 +117,17 @@ namespace Project.Classes {
             return false;
         }
 
-        private async Task WaitForMove() {
+        private async Task WaitForMove(CancellationToken ct) {
             CurrentPlayer.myTurn = true;
-            await CurrentPlayer.MakeMove();
+            // await Task.Run(() => CurrentPlayer.MakeMove(ct), ct);
+            var task = Task.Run(() => CurrentPlayer.MakeMove(ct), ct);
+            while (!task.IsCompleted) {
+                if (ct.IsCancellationRequested) {
+                    return;
+                }
+                await Task.Yield();
+            }
+            
             CurrentPlayer.myTurn = false;
             CurrentPlayer = _playersEnumerator.GetNextCycled();
         }
@@ -121,12 +141,12 @@ namespace Project.Classes {
             _playersEnumerator.Reset();
             CurrentPlayer = _playersEnumerator.GetNextCycled();
             OnNextTurn?.Invoke();
-            _waitTask = WaitForMove();
+            _waitTask = WaitForMove(_tokenSource.Token);
         }
 
-        private void FinishGame(Player.Player player) {
+        private void FinishGame(Player.Player winner) {
             CancelGame();
-            GameFinishedWithWinner?.Invoke(player);
+            GameFinishedWithWinner?.Invoke(winner);
         }
 
         public void CancelGame() {
@@ -135,7 +155,35 @@ namespace Project.Classes {
             }
 
             GameRunning = false;
+            _tokenSource.Cancel();
             _waitTask = null;
+        }
+
+        public void Restart() {
+            if (GameRunning) {
+                CancelGame();
+            }
+            
+            _tokenSource.Dispose();
+            _tokenSource = new CancellationTokenSource();
+
+            Field.Reset();
+            Players.ForEach(player => player.Reset());
+            var yLen = Field.FieldSpaces.GetLength(0);
+            var xLen = Field.FieldSpaces.GetLength(1);
+            var positions = new Point[4] {
+                new Point(0, xLen / 2),
+                new Point(yLen - 1, xLen / 2),
+                new Point(yLen / 2, 0),
+                new Point(yLen / 2, xLen - 1)
+            };
+
+            var pawns = Players.Select(player => player.Pawn).ToList();
+            for (var i = 0; i < pawns.Count; i++) {
+                pawns[i].Reset(positions[i]);
+            }
+
+            StartGame();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Project.Classes.Field;
 
@@ -8,6 +9,7 @@ namespace Project.Classes.Player {
         private bool _moveDone;
 
         private int _numOfWalls;
+        private int _maxWalls;
 
         // private IPlayerController _playerController;
         public Pawn Pawn { get; set; }
@@ -28,12 +30,17 @@ namespace Project.Classes.Player {
 
         public Player(Pawn pawn = null, int numOfWalls = Consts.DEFAULT_NUM_OF_WALLS) {
             Pawn = pawn;
+            _maxWalls = numOfWalls;
             NumOfWalls = numOfWalls;
         }
 
-        public virtual async Task MakeMove() {
+        public virtual async Task MakeMove(CancellationToken ct) {
             // await Task.Run(() => _playerController.GetNextMove()?.Invoke());
             while (!_moveDone) {
+                if (ct.IsCancellationRequested) {
+                    return;
+                }
+
                 await Task.Yield();
             }
 
@@ -57,6 +64,12 @@ namespace Project.Classes.Player {
 
             _moveDone = true;
             return true;
+        }
+
+        public void Reset() {
+            NumOfWalls = _maxWalls;
+            myTurn = false;
+            _moveDone = false;
         }
     }
 }

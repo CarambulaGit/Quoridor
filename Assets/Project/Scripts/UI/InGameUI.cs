@@ -57,7 +57,7 @@ namespace Project.Scripts.UI {
 
 
         private void UpdateNumOfWallsText(Player player, TMP_Text textComponent) {
-            textComponent.text = player.NumOfWalls.ToString();
+            JobsOnMainThread.Worker.AddJob(() => textComponent.text = player.NumOfWalls.ToString());
         }
 
         private void UpdateNumOfWallsP1() {

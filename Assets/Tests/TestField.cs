@@ -118,7 +118,7 @@ namespace Tests {
                 correct3X3FieldSpaces[1, 1].Type =
                     correct3X3FieldSpaces[1, 2].Type = Type.Wall;
             CorrectWallTest(testWall, field, correct3X3FieldSpaces);
-            field.Clear();
+            field.Reset();
             Assert.AreEqual(_correct3X3FieldSpaces, field.FieldSpaces);
         }
 

@@ -56,6 +56,7 @@ namespace Project.Classes.Field {
 
         public event Action OnFieldSizeChanged;
         public event Action<Wall> OnWallPlaced;
+        public event Action OnFieldCleared;
 
         private Point[] relativePointsHor = {new Point(0, -1), new Point(0, 1), new Point(-1, 0), new Point(1, 0)};
         private Point[] relativePointsVer = {new Point(-1, 0), new Point(1, 0), new Point(0, -1), new Point(0, 1)};
@@ -188,7 +189,7 @@ namespace Project.Classes.Field {
             return _allWalls.Where(CanSetWall).ToList();
         }
 
-        public void Clear() {
+        public void Reset() {
             var n = YSize * 2 - 1;
             var m = XSize * 2 - 1;
             for (var y = 0; y < n; y++) {
@@ -205,6 +206,8 @@ namespace Project.Classes.Field {
                     }
                 }
             }
+            
+            OnFieldCleared?.Invoke();
         }
 
         public override bool Equals(object obj) {

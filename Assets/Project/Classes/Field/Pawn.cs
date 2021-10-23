@@ -166,5 +166,9 @@ namespace Project.Classes.Field {
         private bool IsPosTaken(IEnumerable<Pawn> pawns, int y, int x) {
             return pawns.Any(pawn => pawn.Y == y && pawn.X == x);
         }
+
+        public void Reset(Point pos) {
+            Pos = pos;
+        }
     }
 }

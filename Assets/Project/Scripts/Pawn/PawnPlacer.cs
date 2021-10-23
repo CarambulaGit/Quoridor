@@ -17,7 +17,7 @@ namespace Project.Scripts.Pawn {
         private void Start() {
             CheckInitialization();
             FillUpdatePositions();
-            gameManager.OnGameModeChosen += OnGameMoveChosen; 
+            gameManager.OnGameModeChosen += OnGameMoveChosen;
         }
 
         private void CheckInitialization() {
@@ -62,8 +62,8 @@ namespace Project.Scripts.Pawn {
 
         private void UpdatePosition(int i) {
             var pos = _pawns[i].Pos;
-            playersPawns[i].transform.position =
-                places.First(place => place.GetX == pos.X && place.GetY == pos.Y).transform.position;
+            JobsOnMainThread.Worker.AddJob(() => playersPawns[i].transform.position =
+                places.First(place => place.GetX == pos.X && place.GetY == pos.Y).transform.position);
         }
 
         private void Highlight() {

@@ -29,23 +29,14 @@ namespace Project.Scripts {
         public Field Field => Game.Field;
         public Player CurrentPlayer => Game.CurrentPlayer;
 
-        private void Awake() {
-            // CreatePlayerVsPlayer();
-            // CreatePlayerVsBot();
-        }
-
         public void CreatePlayerVsPlayer() {
-            var players = new List<Player> {new LocalPlayer(), new LocalPlayer()};
-            Game = new Game(Consts.DEFAULT_FIELD_SIZE_Y, Consts.DEFAULT_FIELD_SIZE_X, players);
+            Game = Game.CreatePlayerVsPlayer();
             Initialized = true;
             Game.StartGame();
         }
 
         public void CreatePlayerVsBot(bool playerMoveFirst = true) {
-            var players = playerMoveFirst
-                ? new List<Player> {new LocalPlayer(), new RandomBot()}
-                : new List<Player> {new RandomBot(), new LocalPlayer()};
-            Game = new Game(Consts.DEFAULT_FIELD_SIZE_Y, Consts.DEFAULT_FIELD_SIZE_X, players);
+            Game = Game.CreatePlayerVsBot(playerMoveFirst);
             Initialized = true;
             Game.StartGame();
         }
@@ -56,6 +47,10 @@ namespace Project.Scripts {
             }
 
             Game.Tick();
+        }
+
+        public void Restart() {
+            Game.Restart();
         }
     }
 }

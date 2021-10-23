@@ -26,10 +26,13 @@ namespace Project.Scripts.UI {
         private void Subscribe() {
             // todo when Deactivate restart button?
             gameManager.Game.GameFinishedWithWinner += Activate;
+            gameManager.Game.GameStarted += Deactivate;
         }
 
         private void Unsubscribe() {
             gameManager.Game.GameFinishedWithWinner -= Activate;
+            gameManager.Game.GameStarted -= Deactivate;
+
         }
         
         private void AddListenersForButtons() {
@@ -62,8 +65,7 @@ namespace Project.Scripts.UI {
         private void DeactivateWinnerText() => DeactivateGameObject(winnerText.gameObject);
        
         private void RestartGame() {
-            // todo change with normal method
-            SceneManager.LoadScene(0);
+            gameManager.Restart();
         }
     }
 }

@@ -30,6 +30,14 @@ namespace Project.Scripts.Wall {
 
         private void OnGameMoveChosen() {
             gameManager.Game.Field.OnWallPlaced += ShowWall;
+            gameManager.Game.Field.OnFieldCleared += ClearAllWalls;
+        }
+
+        private void ClearAllWalls() {
+            foreach (var place in places) {
+                place.DeactivateHorizontalWall();
+                place.DeactivateVerticalWall();
+            }
         }
 
         private void CheckInitialization() {
