@@ -20,11 +20,11 @@ namespace Project.Classes.Field {
         public Player.Player Owner { get; }
         public Classes.Field.Field Field { get; }
         
-        public Predicate<Point> WinnerCondition { get; private set; }
+        public Predicate<Point> WinCondition { get; private set; }
         public int Y => Pos.Y;
         public int X => Pos.X;
 
-        public bool IsWinner => WinnerCondition(Pos);
+        public bool IsWinner => WinCondition(Pos);
 
         private List<Point> _possibleDirs = new List<Point>();
         private Point _pos;
@@ -34,7 +34,7 @@ namespace Project.Classes.Field {
             Pos = pos;
             Owner = owner;
             Field = field;
-            WinnerCondition = winCondition;
+            WinCondition = winCondition;
         }
 
         public bool TryMove(Point newPos) {
@@ -169,6 +169,11 @@ namespace Project.Classes.Field {
 
         public void Reset(Point pos) {
             Pos = pos;
+        }
+
+        public void Reset(Point pos, Predicate<Point> winCondition) {
+            Pos = pos;
+            WinCondition = winCondition;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Project.Scripts.Pawn {
         private void Start() {
             CheckInitialization();
             FillUpdatePositions();
-            gameManager.OnGameModeChosen += OnGameMoveChosen;
+            gameManager.OnGameModeChosen += OnGameModeChosen;
         }
 
         private void CheckInitialization() {
@@ -34,7 +34,12 @@ namespace Project.Scripts.Pawn {
             };
         }
 
-        private void OnGameMoveChosen() {
+        private void OnGameModeChosen() {
+            gameManager.Game.PlayersOrderChanged += OnPlayersOrderChanged;
+            OnPlayersOrderChanged();
+        }
+
+        private void OnPlayersOrderChanged() {
             Unsubscribe();
             _pawns = gameManager.Game.Players.Select(p => p.Pawn).ToList();
             Highlight();
@@ -52,7 +57,6 @@ namespace Project.Scripts.Pawn {
 
         private void Unsubscribe() {
             for (var i = 0; i < _pawns.Count; i++) {
-                _updatePositions[i].Invoke();
                 _pawns[i].PosChanged -= _updatePositions[i];
             }
 

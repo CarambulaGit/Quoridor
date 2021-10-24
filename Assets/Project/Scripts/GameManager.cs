@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Project.Classes;
 using Project.Classes.Field;
 using Project.Classes.Player;
@@ -51,6 +52,14 @@ namespace Project.Scripts {
 
         public void Restart() {
             Game.Restart();
+        }
+
+        public void Restart(List<Player> players) {
+            Game.Restart(players);
+        }
+
+        public void RestartWithReverseOrder() {
+            Game.Restart(new List<Player> {Game.Players[1], Game.Players[0]});
         }
     }
 }

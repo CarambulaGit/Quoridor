@@ -23,7 +23,21 @@ namespace Project.Scripts.UI {
             gameManager ??= GameObject.FindGameObjectWithTag(Consts.GAME_MANAGER_TAG).GetComponent<GameManager>();
         }
 
+        // private void OnGameModeChosen() {
+            // Unsubscribe();
+            // FillPlayers();
+            // UpdateNumOfWallsP1();
+            // UpdateNumOfWallsP2();
+            // Subscribe();
+            // _firstMatch = false;
+        // }
+        
         private void OnGameModeChosen() {
+            gameManager.Game.PlayersOrderChanged += OnPlayersOrderChanged;
+            OnPlayersOrderChanged();
+        }
+        
+        private void OnPlayersOrderChanged() {
             Unsubscribe();
             FillPlayers();
             UpdateNumOfWallsP1();

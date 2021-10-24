@@ -38,6 +38,7 @@ namespace Project.Classes {
         public event Action GameFinished;
         public event Action<Player.Player> GameFinishedWithWinner;
         public event Action OnNextTurn;
+        public event Action PlayersOrderChanged;
 
         private Game(int ySize, int xSize, List<Player.Player> players) {
             if (players.Count < 2) {
@@ -184,6 +185,48 @@ namespace Project.Classes {
             }
 
             StartGame();
+        }
+
+        public void Restart(List<Player.Player> players) {
+            if (!Players.HasSameContent(players)) {
+                Debug.Log(":(");
+                return;
+            }
+            
+            if (GameRunning) {
+                CancelGame();
+            }
+            
+            _tokenSource.Dispose();
+            _tokenSource = new CancellationTokenSource();
+
+            Field.Reset();
+            Players = players;
+            _playersEnumerator = Players.GetEnumerator();
+            Players.ForEach(player => player.Reset());
+            var yLen = Field.FieldSpaces.GetLength(0);
+            var xLen = Field.FieldSpaces.GetLength(1);
+            var positions = new Point[4] {
+                new Point(0, xLen / 2),
+                new Point(yLen - 1, xLen / 2),
+                new Point(yLen / 2, 0),
+                new Point(yLen / 2, xLen - 1)
+            };
+            
+            var winConditions = new Predicate<Point>[] {
+                p => p.Y == yLen - 1,
+                p => p.Y == 0,
+                p => p.X == xLen - 1,
+                p => p.X == 0,
+            };
+
+            var pawns = Players.Select(player => player.Pawn).ToList();
+            for (var i = 0; i < pawns.Count; i++) {
+                pawns[i].Reset(positions[i], winConditions[i]);
+            }
+
+            StartGame();
+            PlayersOrderChanged?.Invoke();
         }
     }
 }

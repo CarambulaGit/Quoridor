@@ -1,4 +1,5 @@
-﻿using Project.Classes;
+﻿using System.Collections.Generic;
+using Project.Classes;
 using Project.Classes.Player;
 using TMPro;
 using UnityEngine;
@@ -65,7 +66,7 @@ namespace Project.Scripts.UI {
         private void DeactivateWinnerText() => DeactivateGameObject(winnerText.gameObject);
        
         private void RestartGame() {
-            gameManager.Restart();
+            gameManager.RestartWithReverseOrder();
         }
     }
 }
