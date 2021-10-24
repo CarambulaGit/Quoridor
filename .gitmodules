@@ -1,0 +1,3 @@
+[submodule "Assets/Project/Models"]
+	path = Assets/Project/Models
+	url = ../QuoridorModel.git
