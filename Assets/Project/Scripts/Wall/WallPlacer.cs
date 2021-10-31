@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Project.Classes;
+using Project.Classes.Player;
 using UnityEngine;
 
 namespace Project.Scripts.Wall {
@@ -83,7 +84,7 @@ namespace Project.Scripts.Wall {
         }
 
         private void SelectVerticalWall() {
-            if (!gameManager.Game.GameRunning) {
+            if (!gameManager.Game.GameRunning || !(gameManager.CurrentPlayer is LocalPlayer)) {
                 return;
             }
             
@@ -91,7 +92,7 @@ namespace Project.Scripts.Wall {
         }
 
         private void SelectHorizontalWall() {
-            if (!gameManager.Game.GameRunning) {
+            if (!gameManager.Game.GameRunning || !(gameManager.CurrentPlayer is LocalPlayer)) {
                 return;
             }
             
@@ -115,7 +116,7 @@ namespace Project.Scripts.Wall {
                 return;
             }
             
-            if (_selectedWall == null || _selectedWallGO == null) return;
+            if (!(gameManager.CurrentPlayer is LocalPlayer) || _selectedWall == null || _selectedWallGO == null) return;
             if (gameManager.CurrentPlayer.TrySetWall(new Classes.Field.Wall(_closestPlace.GetY, _closestPlace.GetX,
                 _type))) {
                 // if (_selectedWall != null && gameManager.Field.TrySetWall(_selectedWall)) {
