@@ -71,7 +71,7 @@ namespace Project.Scripts.UI {
 
 
         private void UpdateNumOfWallsText(Player player, TMP_Text textComponent) {
-            JobsOnMainThread.Worker.AddJob(() => textComponent.text = player.NumOfWalls.ToString());
+            ThreadManager.Worker.ExecuteOnMainThread(() => textComponent.text = player.NumOfWalls.ToString());
         }
 
         private void UpdateNumOfWallsP1() {

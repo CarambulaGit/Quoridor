@@ -14,13 +14,13 @@ namespace Project.Scripts.Wall {
         public int GetY => y;
         public int GetX => x;
 
-        public void ActivateHorizontalWall() => JobsOnMainThread.Worker.AddJob(() => horizontal.SetActive(true));
+        public void ActivateHorizontalWall() => ThreadManager.Worker.ExecuteOnMainThread(() => horizontal.SetActive(true));
 
-        public void ActivateVerticalWall() => JobsOnMainThread.Worker.AddJob(() => vertical.SetActive(true));
+        public void ActivateVerticalWall() => ThreadManager.Worker.ExecuteOnMainThread(() => vertical.SetActive(true));
 
-        public void DeactivateHorizontalWall() => JobsOnMainThread.Worker.AddJob(() => horizontal.SetActive(false));
+        public void DeactivateHorizontalWall() => ThreadManager.Worker.ExecuteOnMainThread(() => horizontal.SetActive(false));
 
-        public void DeactivateVerticalWall() => JobsOnMainThread.Worker.AddJob(() => vertical.SetActive(false));
+        public void DeactivateVerticalWall() => ThreadManager.Worker.ExecuteOnMainThread(() => vertical.SetActive(false));
 
         private void OnDrawGizmos() {
             Gizmos.color = Color.green;

@@ -66,7 +66,7 @@ namespace Project.Scripts.Pawn {
 
         private void UpdatePosition(int i) {
             var pos = _pawns[i].Pos;
-            JobsOnMainThread.Worker.AddJob(() => playersPawns[i].transform.position =
+            ThreadManager.Worker.ExecuteOnMainThread(() => playersPawns[i].transform.position =
                 places.First(place => place.GetX == pos.X && place.GetY == pos.Y).transform.position);
         }
 
