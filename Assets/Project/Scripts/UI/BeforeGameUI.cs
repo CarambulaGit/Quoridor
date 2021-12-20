@@ -7,10 +7,11 @@ namespace Project.Scripts.UI {
     public class BeforeGameUI : MonoBehaviour {
         [SerializeField] private GameManager gameManager;
         [SerializeField] private Button humanVsHumanButton;
+        [SerializeField] private Button networkPvP;
         [SerializeField] private Button humanVsBotButton;
         [SerializeField] private Button moveFirstButton;
         [SerializeField] private Button moveSecondButton;
-        
+
         private void Awake() {
             CheckInitialization();
             Activate();
@@ -35,6 +36,9 @@ namespace Project.Scripts.UI {
         private void ActivateHumanVsHumanButton() => ActivateGameObject(humanVsHumanButton.gameObject);
         private void DeactivateHumanVsHumanButton() => DeactivateGameObject(humanVsHumanButton.gameObject);
 
+        private void ActivateNetworkPvPButton() => ActivateGameObject(networkPvP.gameObject);
+        private void DeactivateNetworkPvPButton() => DeactivateGameObject(networkPvP.gameObject);
+
         private void ActivateHumanVsBotButton() => ActivateGameObject(humanVsBotButton.gameObject);
         private void DeactivateHumanVsBotButton() => DeactivateGameObject(humanVsBotButton.gameObject);
 
@@ -46,6 +50,7 @@ namespace Project.Scripts.UI {
 
         private void AddListenersForButtons() {
             AddListener(humanVsHumanButton, CreateHumanVsHuman);
+            AddListener(networkPvP, CreateNetworkPvP);
             AddListener(humanVsBotButton, ActivateMoveChose);
             AddListener(moveFirstButton, CreateHumanVsBotHumanFirst);
             AddListener(moveSecondButton, CreateHumanVsBotBotFirst);
@@ -58,12 +63,14 @@ namespace Project.Scripts.UI {
 
         private void Activate() {
             ActivateHumanVsHumanButton();
+            ActivateNetworkPvPButton();
             ActivateHumanVsBotButton();
         }
 
         private void Deactivate() {
             DeactivateHumanVsHumanButton();
             DeactivateHumanVsBotButton();
+            DeactivateNetworkPvPButton();
             DeactivateMoveOrderChose();
         }
 
@@ -78,6 +85,10 @@ namespace Project.Scripts.UI {
 
         private void CreateHumanVsHuman() {
             gameManager.CreatePlayerVsPlayer();
+        }
+        
+        private void CreateNetworkPvP() {
+            gameManager.TryFindNetworkOpponent();
         }
 
         private void ActivateMoveChose() {
