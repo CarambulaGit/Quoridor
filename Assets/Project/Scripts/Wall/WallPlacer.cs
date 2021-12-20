@@ -3,6 +3,7 @@ using System.Linq;
 using Project.Classes;
 using Project.Classes.Player;
 using UnityEngine;
+using NetworkPlayer = Project.Classes.Player.NetworkPlayer;
 
 namespace Project.Scripts.Wall {
     public class WallPlacer : MonoBehaviour {
@@ -84,7 +85,7 @@ namespace Project.Scripts.Wall {
         }
 
         private void SelectVerticalWall() {
-            if (!gameManager.Game.GameRunning || !(gameManager.CurrentPlayer is LocalPlayer)) {
+            if (!gameManager.Game.GameRunning || !(gameManager.CurrentPlayer is LocalPlayer || gameManager.CurrentPlayer is NetworkPlayer {IsLocal: true})) {
                 return;
             }
             
@@ -92,7 +93,7 @@ namespace Project.Scripts.Wall {
         }
 
         private void SelectHorizontalWall() {
-            if (!gameManager.Game.GameRunning || !(gameManager.CurrentPlayer is LocalPlayer)) {
+            if (!gameManager.Game.GameRunning || !(gameManager.CurrentPlayer is LocalPlayer || gameManager.CurrentPlayer is NetworkPlayer {IsLocal: true})) {
                 return;
             }
             
@@ -116,7 +117,7 @@ namespace Project.Scripts.Wall {
                 return;
             }
             
-            if (!(gameManager.CurrentPlayer is LocalPlayer) || _selectedWall == null || _selectedWallGO == null) return;
+            if (!(gameManager.CurrentPlayer is LocalPlayer || gameManager.CurrentPlayer is NetworkPlayer {IsLocal: true}) || _selectedWall == null || _selectedWallGO == null) return;
             if (gameManager.CurrentPlayer.TrySetWall(new Classes.Field.Wall(_closestPlace.GetY, _closestPlace.GetX,
                 _type))) {
                 // if (_selectedWall != null && gameManager.Field.TrySetWall(_selectedWall)) {

@@ -4,6 +4,7 @@ using System.Linq;
 using Project.Classes;
 using Project.Classes.Player;
 using UnityEngine;
+using NetworkPlayer = Project.Classes.Player.NetworkPlayer;
 
 namespace Project.Scripts.Pawn {
     public class PawnPlacer : MonoBehaviour {
@@ -76,7 +77,7 @@ namespace Project.Scripts.Pawn {
             }
 
             var curPlayer = gameManager.CurrentPlayer;
-            if (!(curPlayer is LocalPlayer)) {
+            if (!(curPlayer is LocalPlayer || curPlayer is NetworkPlayer {IsLocal: true})) {
                 return;
             }
 

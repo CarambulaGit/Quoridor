@@ -4,6 +4,7 @@ using Project.Classes.Field;
 using Project.Classes.Player;
 using Project.Scripts.Wall;
 using UnityEngine;
+using NetworkPlayer = Project.Classes.Player.NetworkPlayer;
 
 namespace Project.Scripts.Pawn {
     public class PlaceForPawn : MonoBehaviour {
@@ -50,7 +51,7 @@ namespace Project.Scripts.Pawn {
             }
 
             var curPlayer = gameManager.CurrentPlayer;
-            if (curPlayer is LocalPlayer) {
+            if (curPlayer is LocalPlayer || curPlayer is NetworkPlayer {IsLocal: true}) {
                 curPlayer.TryMovePawn(new Point(y, x));
             }
         }
