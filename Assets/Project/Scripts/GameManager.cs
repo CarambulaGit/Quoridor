@@ -4,6 +4,7 @@ using System.Linq;
 using Project.Classes;
 using Project.Classes.Field;
 using Project.Classes.Player;
+// using Project.Models.Client;
 using UnityEngine;
 
 namespace Project.Scripts {
@@ -36,10 +37,24 @@ namespace Project.Scripts {
             Game.StartGame();
         }
 
+        public void CreateNetworkPlayerVsPlayer(int localPlayerId, int networkPlayerId, bool localPlayerFirst = true) {
+            Game = Game.CreateNetworkPlayerVsPlayer(localPlayerFirst, localPlayerId, networkPlayerId);
+            Initialized = true;
+            Game.StartGame();
+        }
+
+        public void TryFindNetworkOpponent() { // todo button search network opponent
+            Client.instance.ConnectToServer();
+        }
+
         public void CreatePlayerVsBot(bool playerMoveFirst = true) {
             Game = Game.CreatePlayerVsBot(playerMoveFirst);
             Initialized = true;
             Game.StartGame();
+        }
+
+        private void Awake() {
+            Application.targetFrameRate = 30;
         }
 
         public void Update() {
