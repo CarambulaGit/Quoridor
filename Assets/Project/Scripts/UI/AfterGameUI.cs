@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Project.Classes;
 using Project.Classes.Player;
 using TMPro;
@@ -6,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using NetworkPlayer = Project.Classes.Player.NetworkPlayer;
 
 namespace Project.Scripts.UI {
     public class AfterGameUI : MonoBehaviour {
@@ -66,7 +68,14 @@ namespace Project.Scripts.UI {
         private void DeactivateWinnerText() => DeactivateGameObject(winnerText.gameObject);
        
         private void RestartGame() {
-            gameManager.RestartWithReverseOrder();
+            if (gameManager.Game.Players.All(player => player is NetworkPlayer))
+            {
+                ClientSend.SendRestart();
+            }
+            else
+            {
+                gameManager.RestartWithReverseOrder();   
+            }
         }
     }
 }
