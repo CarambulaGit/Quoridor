@@ -78,7 +78,7 @@ namespace Project.Scripts {
         }
 
         private void OnApplicationQuit() {
-            Game._tokenSource.Cancel();
+            Game?._tokenSource.Cancel();
         }
     }
 }
