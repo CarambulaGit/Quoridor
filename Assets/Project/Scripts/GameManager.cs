@@ -76,5 +76,9 @@ namespace Project.Scripts {
         public void RestartWithReverseOrder() {
             Game.Restart(new List<Player> {Game.Players[1], Game.Players[0]});
         }
+
+        private void OnApplicationQuit() {
+            Game._tokenSource.Cancel();
+        }
     }
 }
