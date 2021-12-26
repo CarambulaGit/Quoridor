@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Project.Classes;
 using Project.Classes.Field;
@@ -56,7 +57,7 @@ namespace Project.Scripts.Pawn {
             }
         }
 
-        public async void Highlight() {
+        public async void Highlight(CancellationToken ct) {
             _highlightCounter++;
             var nextTurn = false;
             void OnNextTurn() => nextTurn = true;
@@ -65,11 +66,24 @@ namespace Project.Scripts.Pawn {
             gameManager.Game.GameFinished += OnGameFinished;
             while (_highlightCounter > 1) {
                 await Task.Yield();
+                if (ct.IsCancellationRequested) {
+                    gameManager.Game.OnNextTurn -= OnNextTurn;
+                    gameManager.Game.GameFinished -= OnGameFinished;
+                    _highlightCounter--;
+                    return;
+                }
             }
 
             meshRenderer.enabled = true;
             while (!nextTurn) {
                 await Task.Yield();
+                if (ct.IsCancellationRequested) {
+                    gameManager.Game.OnNextTurn -= OnNextTurn;
+                    gameManager.Game.GameFinished -= OnGameFinished;
+                    _highlightCounter--;
+                    meshRenderer.enabled = false;
+                    return;
+                }
             }
 
             gameManager.Game.OnNextTurn -= OnNextTurn;

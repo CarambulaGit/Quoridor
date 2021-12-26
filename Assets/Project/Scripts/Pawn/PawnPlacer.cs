@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Project.Classes;
 using Project.Classes.Player;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Project.Scripts.Pawn {
         [SerializeField] private GameManager gameManager;
         [SerializeField] private List<GameObject> playersPawns;
         [SerializeField] private PlaceForPawn[] places;
+        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
         private List<Classes.Field.Pawn> _pawns = new List<Classes.Field.Pawn>();
 
         private Action[] _updatePositions;
@@ -85,10 +87,14 @@ namespace Project.Scripts.Pawn {
             foreach (var place in places) {
                 foreach (var dir in dirs) {
                     if (dir.Y == place.GetY && dir.X == place.GetX) {
-                        place.Highlight();
+                        place.Highlight(_tokenSource.Token);
                     }
                 }
             }
+        }
+
+        private void OnApplicationQuit() {
+            _tokenSource.Cancel();
         }
     }
 }
